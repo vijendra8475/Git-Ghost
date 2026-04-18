@@ -3,16 +3,22 @@ async function handleCommand(command, context) {
 
   if (command.startsWith("fix")) {
     return `
-🔧 Suggested Fix:
+## 🔧 GhostVision Fix Suggestion
 
-Issue: ${issueTitle}
+**Issue:** ${issueTitle}
 
-Possible solution:
-- Check related function logic
-- Add proper error handling
-- Verify API responses
+**Analysis:**
+- Possible logic error
+- Missing validation
+- Edge case not handled
 
-⚠️ This is a prototype suggestion.
+**Suggested Fix:**
+- Review related function
+- Add error handling
+- Test with edge inputs
+
+---
+⚠️ *Prototype response (AI coming soon)*
 `;
   }
 
