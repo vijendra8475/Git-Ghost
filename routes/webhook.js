@@ -2,30 +2,27 @@ const express = require("express");
 const router = express.Router();
 const { parseCommand } = require("../utils/parser");
 const { postComment } = require('../services/github')
+const { handleCommand } = require("../handlers/commandHandler");
 
-router.post("/", (req, res) => {
-    const event = req.headers["x-github-event"];
-    const payload = req.body;
+router.post("/", async (req, res) => {
+  const event = req.headers["x-github-event"];
+  const payload = req.body;
 
-    if (event === "issue_comment") {
-        const comment = payload.comment.body;
+  if (event === "issue_comment") {
+    const comment = payload.comment.body;
+    const command = parseCommand(comment);
 
-        console.log("💬 Comment:", comment);
+    if (command) {
+      console.log("🔥 Command:", command);
 
-        const command = parseCommand(comment);
+      const response = await handleCommand(command);
 
-        const { postComment } = require("../services/github");
+      const commentsUrl = payload.issue.comments_url;
 
-        if (command) {
-            console.log("🔥 Command detected:", command);
-
-            const commentsUrl = payload.issue.comments_url;
-
-            postComment(commentsUrl, `👀 Received command: "${command}"`);
-        }
+      await postComment(commentsUrl, response);
     }
+  }
 
-    res.status(200).send("OK");
+  res.status(200).send("OK");
 });
-
 module.exports = router;
