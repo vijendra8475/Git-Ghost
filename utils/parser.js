@@ -3,9 +3,12 @@ function parseCommand(comment) {
 
   const trigger = "@ghostvision";
 
-  if (!comment.includes(trigger)) return null;
+  // MUST start with trigger (important)
+  if (!comment.trim().toLowerCase().startsWith(trigger)) {
+    return null;
+  }
 
-  const command = comment.split(trigger)[1]?.trim();
+  const command = comment.slice(trigger.length).trim();
 
   return command || null;
 }

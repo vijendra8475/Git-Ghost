@@ -10,6 +10,10 @@ router.post("/", async (req, res) => {
     const event = req.headers["x-github-event"];
     const payload = req.body;
 
+    if (payload.sender.type === "Bot") {
+        return res.status(200).send("Ignored bot message");
+    }
+
 
 
     if (event === "issue_comment") {
@@ -38,7 +42,7 @@ router.post("/", async (req, res) => {
 
             await postComment(commentsUrl, response);
         }
-        
+
     }
 
     res.status(200).send("OK");
